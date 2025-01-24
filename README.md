@@ -17,6 +17,7 @@ This Employee Management application provides functionality to manage employees,
     - [Prerequisites](#prerequisites)
     - [Steps](#steps)
   - [Future Enhancements](#future-enhancements)
+  - [Demo](#demo)
 
 ---
 
@@ -98,4 +99,22 @@ The application is divided into three layers:
 - Add functionality for editing and deleting employees.
 - Implement authentication and role-based access control.
 - Enhance UI for better accessibility and user experience.
+
+
+## Demo
+- Display employee list and add new employees.
+- Input validations
+  
+  ![AddEmployee](https://github.com/user-attachments/assets/427b92d0-6b61-4db3-951f-53738756b6d2)
+
+- if employee id already exists, throw warning:
+  
+  ![checkExistingEmployeeId](https://github.com/user-attachments/assets/a4628345-0d9e-4180-aeca-4ce05a60a117)
+
+- Add employees with Director (manager) roles. Newly added employees with management role will also be displayed in the drowdown.
+  
+  ![AddManager](https://github.com/user-attachments/assets/af5e9a6d-c47f-4252-8ef8-f1ea252455e3)
+
+
+
 
