@@ -25,7 +25,7 @@ This Employee Management application provides functionality to manage employees,
 
 - **Employee Management**: Add, view, and manage employee details.
 - **Manager Filtering**: Filter employees by their respective managers.
-- **Data Storage**: Persist employee data using SQLite database.
+- **Data Storage**: Persist employee data using SQL Server database.
 - **Separation of Concerns**: Clear division of responsibilities between the data, business, and UI layers.
 - **Modern UI**: Responsive frontend design using React and Material-UI.
 - **RESTful API**: Efficient and scalable API endpoints for employee management.
@@ -37,7 +37,7 @@ This Employee Management application provides functionality to manage employees,
 ### Backend
 - **C#/.NET Core**: For API and business logic implementation.
 - **Entity Framework Core**: For database management and object-relational mapping.
-- **SQLite**: Lightweight database for storing application data.
+- **SQL Server**: A robust, scalable relational database for storing application data.
 
 ### Frontend
 - **React.js**: For building the user interface.
@@ -76,7 +76,7 @@ The application is divided into three layers:
 ### Prerequisites
 - .NET SDK
 - Node.js and npm
-- SQLite
+- SQL Server
 
 ### Steps
 1. Clone the repository:
