@@ -42,7 +42,7 @@ function EmployeeList() {
     const selectedManagerId = e.target.value;
     setManagerId(selectedManagerId);
 
-    const url = selectedManagerId ? `/api/employee?managerId=${selectedManagerId}` : "/employees";
+    const url = selectedManagerId ? `/api/employee?managerId=${selectedManagerId}` : "/api/employee";
 
     axios
       .get(url)
