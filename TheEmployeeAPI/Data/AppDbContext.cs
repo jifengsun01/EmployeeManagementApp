@@ -14,6 +14,10 @@ namespace TheEmployeeAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Manager)
                 .WithMany()
                 .HasForeignKey(e => e.ManagerId);
