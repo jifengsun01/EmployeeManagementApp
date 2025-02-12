@@ -11,14 +11,25 @@ import {
   Paper,
   Button,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
   const [managers, setManagers] = useState([]);
-  const [managerId, setManagerId] = useState(""); // Manager selection state
+  const [managerId, setManagerId] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
 
   useEffect(() => {
+    fetchEmployees();
+    fetchManagers();
+  }, []);
+
+  const fetchEmployees = () => {
     axios
       .get("/api/employee")
       .then((response) => {
@@ -27,16 +38,18 @@ function EmployeeList() {
       .catch((error) => {
         console.error("Error fetching employees:", error);
       });
+  };
 
+  const fetchManagers = () => {
     axios
-      .get("api/employee/managers")
+      .get("/api/employee/managers")
       .then((response) => {
         setManagers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching managers:", error);
       });
-  }, []);
+  };
 
   const handleManagerChange = (e) => {
     const selectedManagerId = e.target.value;
@@ -52,6 +65,30 @@ function EmployeeList() {
       .catch((error) => {
         console.error("Error fetching employees by manager:", error);
       });
+  };
+
+  const handleDeleteClick = (employee) => {
+    setEmployeeToDelete(employee);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    axios
+      .delete(`/api/employee/${employeeToDelete.id}`)
+      .then(() => {
+        fetchEmployees(); // Refresh the employee list
+        fetchManagers(); // Refresh manager list
+        setDeleteDialogOpen(false);
+      })
+      .catch((error) => {
+        console.error("Error deleting employee:", error);
+        setDeleteDialogOpen(false);
+      });
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setEmployeeToDelete(null);
   };
 
   return (
@@ -122,6 +159,16 @@ function EmployeeList() {
               >
                 Last Name
               </TableCell>
+              <TableCell
+                sx={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  border: "2px solid #000",
+                  fontSize: "18px",
+                }}
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -154,6 +201,21 @@ function EmployeeList() {
                 >
                   {employee.lastName}
                 </TableCell>
+                <TableCell
+                  sx={{
+                    textAlign: "center",
+                    border: "2px solid #000",
+                    fontSize: "16px",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDeleteClick(employee)}
+                  >
+                    Remove
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -173,6 +235,20 @@ function EmployeeList() {
       >
         Add Employee
       </Button>
+
+      {/* Delete confirmation dialog */}
+      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete {employeeToDelete?.firstName} {employeeToDelete?.lastName}?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
