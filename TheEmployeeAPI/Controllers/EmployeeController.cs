@@ -71,5 +71,61 @@ namespace TheEmployeeAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(new {message = $"Employee with ID {id} has been deleted"});
         }
+
+
+        // Get a single employee by ID
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEmployeeById(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
+            {
+                return NotFound(new { message = $"Employee with ID {id} not found." });
+            }
+            return Ok(employee);
+        }
+
+
+        // Update an existing employee
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] Employee updatedEmployee)
+        {
+            if (id != updatedEmployee.Id)
+            {
+                return BadRequest(new { message = "Employee ID mismatch." });
+            }
+
+            var existingEmployee = await _context.Employees.FindAsync(id);
+            if (existingEmployee == null)
+            {
+                return NotFound(new { message = $"Employee with ID {id} not found." });
+            }
+
+            // Update the employee's properties
+            existingEmployee.FirstName = updatedEmployee.FirstName;
+            existingEmployee.LastName = updatedEmployee.LastName;
+            existingEmployee.Roles = updatedEmployee.Roles;
+            existingEmployee.ManagerId = updatedEmployee.ManagerId;
+
+            _context.Entry(existingEmployee).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Employees.Any(e => e.Id == id))
+                {
+                    return NotFound(new { message = $"Employee with ID {id} not found." });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent(); // 204 No Content is typically returned for successful updates
+        }
     }
 }
