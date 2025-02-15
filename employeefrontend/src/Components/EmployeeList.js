@@ -24,11 +24,6 @@ function EmployeeList() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
 
-  useEffect(() => {
-    fetchEmployees();
-    fetchManagers();
-  }, []);
-
   const fetchEmployees = () => {
     axios
       .get("/api/employee")
@@ -50,6 +45,11 @@ function EmployeeList() {
         console.error("Error fetching managers:", error);
       });
   };
+
+  useEffect(() => {
+    fetchEmployees();
+    fetchManagers();
+  }, []);
 
   const handleManagerChange = (e) => {
     const selectedManagerId = e.target.value;
@@ -208,6 +208,15 @@ function EmployeeList() {
                     fontSize: "16px",
                   }}
                 >
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    component={Link}
+                    to={`/edit-employee/${employee.id}`} // Link to the edit page
+                    sx={{ marginRight: 1 }}
+                  >
+                    Edit
+                  </Button>
                   <Button
                     variant="contained"
                     color="error"
